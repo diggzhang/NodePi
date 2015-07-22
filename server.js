@@ -12,7 +12,7 @@ pi.on('connection', function (socket) {
 
     socket.on('piCall', function (piIP, callback) {
         console.log("==>" + piIP); 
-        callback(102);
+        callback("Server_GetPi");
     });
 
 });
