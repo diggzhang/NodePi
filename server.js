@@ -11,10 +11,13 @@ var pi = io.of('/hellopi');
 pi.on('connection', function (socket) {
 
     socket.on('piCall', function (piIP, callback) {
-        console.log("==>" + piIP); 
+        console.log("==>" + piIP.hostName);
+        console.log("==>" + piIP.ipAddress);
+	    console.log("==>" + piIP.exipAddress);
         callback("Server_GetPi");
     });
 
+	
 });
 
 server.listen(8080);
