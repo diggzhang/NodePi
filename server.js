@@ -8,17 +8,21 @@ var server = http.createServer(app);
 
 var io = require('socket.io').listen(server);
 var pi = io.of('/hellopi');
+
 pi.on('connection', function (socket) {
 
-    socket.on('piCall', function (piIP, callback) {
-        console.log("==>" + piIP.hostName);
-        console.log("==>" + piIP.ipAddress);
-	    console.log("==>" + piIP.exipAddress);
-        callback("Server_GetPi");
-    });
+	socket.on('piCall', function (piIP, callback) {
+		console.log("==>" + piIP.hostName);
+		console.log("==>" + piIP.ipAddress);
+		console.log("==>" + piIP.exipAddress);
+		callback("Server_GetPi");
+	});
 
-	
+	socket.on('disconnect', function () {
+		console.log("Server Disconnected")
+	});
 });
+
 
 server.listen(8080);
 console.log("Server Running on Port 8080");

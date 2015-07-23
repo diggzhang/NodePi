@@ -20,6 +20,7 @@ var ifaces = os.networkInterfaces();
 // Padding IP Address Need To Send
 var paddingIP = "";
 var paddgingExtIP = "";
+var localIpAddress = {};
 
 async.series({
 	paddingIP: function (callback) {
@@ -51,7 +52,7 @@ async.series({
 
 		console.log('Find Server! :D');
 
-		var localIpAddress = {
+		localIpAddress = {
 			"hostName" : hostname,
 			"ipAddress" : result.paddingIP,
 			"exipAddress": result.paddgingExtIP
@@ -61,17 +62,20 @@ async.series({
 			console.log('piCall server return : ' + res);
 		});
 
-		conn.on('reconnect', function () {
-			console.log('Attempt to link server...');
-		});
-
-		conn.on('disconnect', function () {
-			console.log("Server BreakDown :X");
-		});
-
 
 	});
 
 });
 
+conn.on('reconnecting', function () {
+	console.log("reconnecting...");
+});
+
+conn.on('reconnect', function () {
+	console.log('Attempt to link server...');
+});
+
+conn.on('disconnect', function () {
+	console.log("Server BreakDown :X");
+});
 
