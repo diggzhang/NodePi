@@ -19,7 +19,7 @@ pi.on('connection', function (socket) {
 	});
 
 	socket.on('disconnect', function () {
-		console.log("Server Disconnected")
+		console.log("One Pi Disconnected")
 	});
 });
 
