@@ -19,53 +19,50 @@ var ifaces = os.networkInterfaces();
 
 // Padding IP Address Need To Send
 var paddingIP = "";
-var paddgingExtIP = "";
+var paddingExtIP = "";
 var localIpAddress = {};
 
-async.series({
-	paddingIP: function (callback) {
+conn.on('connect', function () {
 
-		for (var dev in ifaces) {
-			ifaces[dev].forEach(function (details) {
-				if (details.family == 'IPv4' && details.ip != '127.0.0.1') {
-					paddingIP = details.address;
-				}
+	console.log('Pi Find Server :D');
+
+	async.series({
+		paddingIP: function (callback) {
+			for (var dev in ifaces) {
+				ifaces[dev].forEach(function (details) {
+					if (details.family == 'IPv4' && details.ip != '127.0.0.1') {
+						paddingIP = details.address;
+					};
+				});
+			};
+
+			callback(null, paddingIP);
+		},
+
+		paddingExtIP: function (callback) {
+
+			extip.fetch(function (ip) {
+				paddingExtIP = ip;
+				callback(null, paddingExtIP);
 			});
-		};
+		}
 
-		callback(null, paddingIP);
-	},
-
-	paddgingExtIP: function (callback) {
-
-		extip.fetch(function (ip) {
-			paddgingExtIP = ip;
-			callback(null, paddgingExtIP)
-		});
-
-	}
-}, function (err, result) {
-	// socket.io
-
-
-	conn.on('connect', function () {
-
-		console.log('Find Server! :D');
+	}, function (err, result) {
 
 		localIpAddress = {
-			"hostName" : hostname,
-			"ipAddress" : result.paddingIP,
-			"exipAddress": result.paddgingExtIP
+			"hostName": hostname,
+			"ipAddress": result.paddingIP,
+			"exipAddress": result.paddingExtIP
 		};
 
 		conn.emit('piCall', localIpAddress, function (res, data) {
-			console.log('piCall server return : ' + res);
+			console.log('PiCall Sever response: ' +  res);
 		});
-
-
 	});
 
 });
+
+
 
 conn.on('reconnecting', function () {
 	console.log("reconnecting...");
