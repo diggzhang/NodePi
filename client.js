@@ -3,12 +3,12 @@ var async = require('async');
 var io = require('socket.io-client');
 var serverUrl = 'http://localhost:8080/hellopi';
 var conn = io.connect(serverUrl, {
-						'multiplex': false,
-						'force new connection': true,
-						'reconnect': true,
-						'reconnection delay': 500,
-						'max reconnection attempts': 10
-					  });
+                        'multiplex': false,
+                        'force new connection': true,
+                        'reconnect': true,
+                        'reconnection delay': 500,
+                        'max reconnection attempts': 10
+                      });
 
 // get external ip and local ip
 // system info, for get networkinterfaces and hostname
@@ -24,55 +24,53 @@ var localIpAddress = {};
 
 conn.on('connect', function () {
 
-	console.log('Pi Find Server :D');
+    console.log('Pi Find Server :D');
 
-	async.series({
-		paddingIP: function (callback) {
-			for (var dev in ifaces) {
-				ifaces[dev].forEach(function (details) {
-					if (details.family == 'IPv4' && details.ip != '127.0.0.1') {
-						paddingIP = details.address;
-					};
-				});
-			};
+    async.series({
+        paddingIP: function (callback) {
+            for (var dev in ifaces) {
+                ifaces[dev].forEach(function (details) {
+                    if (details.family == 'IPv4' && details.ip != '127.0.0.1') {
+                        paddingIP = details.address;
+                    };
+                });
+            };
 
-			callback(null, paddingIP);
-		},
+            callback(null, paddingIP);
+        },
 
-		paddingExtIP: function (callback) {
+        paddingExtIP: function (callback) {
 
-			extip.fetch(function (ip) {
-				paddingExtIP = ip;
-				callback(null, paddingExtIP);
-			});
-		}
+            extip.fetch(function (ip) {
+                paddingExtIP = ip;
+                callback(null, paddingExtIP);
+            });
+        }
 
-	}, function (err, result) {
+    }, function (err, result) {
 
-		localIpAddress = {
-			"hostName": hostname,
-			"ipAddress": result.paddingIP,
-			"exipAddress": result.paddingExtIP
-		};
+        localIpAddress = {
+            "hostName": hostname,
+            "ipAddress": result.paddingIP,
+            "exipAddress": result.paddingExtIP
+        };
 
-		conn.emit('piCall', localIpAddress, function (res, data) {
-			console.log('PiCall Sever response: ' +  res);
-		});
-	});
+        conn.emit('piCall', localIpAddress, function (res, data) {
+            console.log('PiCall Sever response: ' +  res);
+        });
+    });
 
 });
 
-
-
 conn.on('reconnecting', function () {
-	console.log("reconnecting...");
+    console.log("reconnecting...");
 });
 
 conn.on('reconnect', function () {
-	console.log('Attempt to link server...');
+    console.log('Attempt to link server...');
 });
 
 conn.on('disconnect', function () {
-	console.log("Server BreakDown :X");
+    console.log("Server BreakDown :X");
 });
 
