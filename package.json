@@ -11,8 +11,11 @@
   "dependencies": {
     "errorhandler": "^1.4.1",
     "express": "^4.13.1",
-    "extip": "0.0.3",
     "socket.io": "^1.3.6",
-    "socket.io-client": "^1.3.6"
+    "diskdb": "^0.1.14",
+
+    "extip": "0.0.3",
+    "socket.io-client": "^1.3.6",
+    "async": "1.4.0"
   }
 }
