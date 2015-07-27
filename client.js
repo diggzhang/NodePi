@@ -24,7 +24,7 @@ var localIpAddress = {};
 
 conn.on('connect', function () {
 
-    console.log('Pi Find Server :D');
+    console.log('Pi find server :D');
 
     async.series({
         paddingIP: function (callback) {
@@ -59,7 +59,7 @@ conn.on('connect', function () {
         console.log(conn.id);
 
         conn.emit('piCall', localIpAddress, function (res, data) {
-            console.log('PiCall Sever response: ' +  res);
+            console.log('PiCall server response: ' +  res);
         });
     });
 
@@ -70,10 +70,9 @@ conn.on('reconnecting', function () {
 });
 
 conn.on('reconnect', function () {
-    console.log('Attempt to link server...');
+    console.log('attempt to link server...');
 });
 
 conn.on('disconnect', function () {
-    console.log("Server BreakDown :X");
+    console.log("server disconnect :X");
 });
-

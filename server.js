@@ -40,9 +40,9 @@ pi.on('connection', function (socket) {
         db.iplogs.remove({
             clientId: ipNeedToSave.clientId
         }, false);
-        console.log("Drop One IP");
+        console.log("drop one IP");
     });
 });
 
 server.listen(8080);
-console.log("Server Running on Port 8080");
+console.log("server running on port 8080");
