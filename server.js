@@ -17,25 +17,30 @@ pi.on('connection', function (socket) {
 
     var ipNeedToSave = {};
     socket.on('piCall', function (piIP, callback) {
-        console.log("==>" + piIP.hostName);
-        console.log("==>" + piIP.ipAddress);
-        console.log("==>" + piIP.exipAddress);
 
         ipNeedToSave = {
             "hostname": piIP.hostName,
             "extip": piIP.exipAddress,
-            "ip": piIP.ipAddress
+            "ip": piIP.ipAddress,
+            "clientId": piIP.clientId
         };
 
+        console.log("client ID:" + piIP.clientId);
+
+        console.log("save: " + ipNeedToSave.extip + " => "
+            + ipNeedToSave.ip);
         db.iplogs.save(ipNeedToSave);
         callback("Server_GetPi");
     });
 
     socket.on('disconnect', function () {
-        console.log("One Pi Disconnected");
+        console.log("one pi disconnected X <:3 )~ ");
+        console.log("delete: " + ipNeedToSave.extip + ' => '
+            + ipNeedToSave.ip + ' | ' + ipNeedToSave.clientId);
         db.iplogs.remove({
-            extip: ipNeedToSave.extip
-        });
+            clientId: ipNeedToSave.clientId
+        }, false);
+        console.log("Drop One IP");
     });
 });
 

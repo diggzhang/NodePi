@@ -52,8 +52,11 @@ conn.on('connect', function () {
         localIpAddress = {
             "hostName": hostname,
             "ipAddress": result.paddingIP,
-            "exipAddress": result.paddingExtIP
+            "exipAddress": result.paddingExtIP,
+            "clientId": conn.id
         };
+
+        console.log(conn.id);
 
         conn.emit('piCall', localIpAddress, function (res, data) {
             console.log('PiCall Sever response: ' +  res);
