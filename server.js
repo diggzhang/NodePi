@@ -2,16 +2,23 @@ var http = require('http');
 var express = require('express');
 var app = express();
 app.use(express.static(__dirname + '/'));
-
 var db = require('diskdb');
 db.connect('./db',['iplogs']);
-
 var errorhandler = require('errorhandler');
 app.use(errorhandler()); // development only
 var server = http.createServer(app);
-
 var io = require('socket.io').listen(server);
 var pi = io.of('/hellopi');
+//var routes = require('./routes/index');
+//var cookieParser = require('cookie-parser');
+//var bodyParser = require('body-parser');
+
+
+if (db.iplogs.count() != 0) {
+    console.log("booting delete "+ db.iplogs.count() +" logs")
+    db.iplogs.remove();
+    db.connect('./db',['iplogs']);
+}
 
 pi.on('connection', function (socket) {
 
