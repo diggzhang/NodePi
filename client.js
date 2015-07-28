@@ -70,7 +70,7 @@ conn.on('reconnecting', function () {
 });
 
 conn.on('reconnect', function () {
-    console.log('attempt to link server...');
+    console.log('attempt to link server :P');
 });
 
 conn.on('disconnect', function () {
