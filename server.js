@@ -1,9 +1,8 @@
 var http = require('http');
 var express = require('express');
 var app = express();
-app.use(express.static(__dirname + '/'));
 var db = require('diskdb');
-db.connect('./db',['iplogs']);
+db.connect('./db', ['iplogs']);
 var errorhandler = require('errorhandler');
 app.use(errorhandler()); // development only
 var server = http.createServer(app);
@@ -11,26 +10,30 @@ var io = require('socket.io').listen(server);
 var pi = io.of('/hellopi');
 
 if (db.iplogs.count() != 0) {
-    console.log("booting delete "+ db.iplogs.count() +" logs")
+    console.log("booting delete " + db.iplogs.count() + " logs")
     db.iplogs.remove();
-    db.connect('./db',['iplogs']);
+    db.connect('./db', ['iplogs']);
 }
 
 app.get('/nodepi', function (req, res) {
 
     var userip = req.connection.remoteAddress;
     console.log("get user IP form header : " + userip);
-    var servObj = db.iplogs.find({"extip" : userip});
+    var servObj = db.iplogs.find({"ip": userip});
+    // API需要接受的是用户的出网IP以及localIP
+    //var servObj = db.iplogs.find({"extip" : userip});
     if (servObj.length) {
         res.json({
             "extip": servObj[0].extip,
             "localip": servObj[0].ip
         });
     } else {
-       res.json({
-           "error": "pi not found"
-       });
-    };
+        res.status(404)
+            .json({
+                "error": "pi not found"
+            });
+    }
+    ;
 
 });
 
