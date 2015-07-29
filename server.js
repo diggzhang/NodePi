@@ -9,10 +9,6 @@ app.use(errorhandler()); // development only
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var pi = io.of('/hellopi');
-//var routes = require('./routes/index');
-//var cookieParser = require('cookie-parser');
-//var bodyParser = require('body-parser');
-
 
 if (db.iplogs.count() != 0) {
     console.log("booting delete "+ db.iplogs.count() +" logs")
