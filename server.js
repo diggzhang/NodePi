@@ -18,16 +18,20 @@ if (db.iplogs.count() != 0) {
 
 app.get('/nodepi', function (req, res) {
 
-    var useripa = req.connection.remoteAddress;
-    var useripb = req.header('x-forwarded-for') || req.connection.remoteAddress;
-    console.log("get user IP form header : " + useripa + " " + useripb)
+    var userip = req.connection.remoteAddress;
+    console.log("get user IP form header : " + userip);
+    var servObj = db.iplogs.find({"extip" : userip});
+    if (servObj.length) {
+        res.json({
+            "extip": servObj[0].extip,
+            "localip": servObj[0].ip
+        });
+    } else {
+       res.json({
+           "error": "pi not found"
+       });
+    };
 
-    var servObj = db.iplogs.find({ip: useripa});
-
-    res.json({
-        "extip": servObj[0].extip,
-        "localip": servObj[0].ip
-    });
 });
 
 pi.on('connection', function (socket) {
@@ -49,6 +53,9 @@ pi.on('connection', function (socket) {
         db.iplogs.save(ipNeedToSave);
         callback("Server_GetPi");
     });
+
+    //可以获取通过socket方式获取对端IP
+    //console.log("===> " + socket.request.connection._peername.address)
 
     socket.on('disconnect', function () {
         console.log("one pi disconnected X <:3 )~ ");
