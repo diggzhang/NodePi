@@ -56,7 +56,7 @@ conn.on('connect', function () {
             "clientId": conn.id
         };
 
-        console.log(conn.id);
+        console.log("Pi connect ID: " + conn.id);
 
         conn.emit('piCall', localIpAddress, function (res, data) {
             console.log('PiCall server response: ' +  res);
