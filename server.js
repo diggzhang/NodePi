@@ -20,7 +20,7 @@ if (db.iplogs.count() != 0) {
     db.connect('./db',['iplogs']);
 }
 
-app.get('/', function (req, res) {
+app.get('/nodepi', function (req, res) {
 
     var useripa = req.connection.remoteAddress;
     var useripb = req.header('x-forwarded-for') || req.connection.remoteAddress;
