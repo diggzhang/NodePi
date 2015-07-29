@@ -26,8 +26,8 @@ conn.on('connect', function () {
 
     console.log('Pi find server :D');
 
-    async.series({
-        paddingIP: function (callback) {
+    async.parallel([
+        function (callback) {
             for (var dev in ifaces) {
                 ifaces[dev].forEach(function (details) {
                     if (details.family == 'IPv4' && details.ip != '127.0.0.1') {
@@ -39,7 +39,7 @@ conn.on('connect', function () {
             callback(null, paddingIP);
         },
 
-        paddingExtIP: function (callback) {
+        function (callback) {
 
             extip.fetch(function (ip) {
                 paddingExtIP = ip;
@@ -47,12 +47,12 @@ conn.on('connect', function () {
             });
         }
 
-    }, function (err, result) {
+    ], function (err, results) {
 
         localIpAddress = {
             "hostName": hostname,
-            "ipAddress": result.paddingIP,
-            "exipAddress": result.paddingExtIP,
+            "ipAddress": results[0],
+            "exipAddress": results[1],
             "clientId": conn.id
         };
 
