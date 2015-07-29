@@ -20,6 +20,20 @@ if (db.iplogs.count() != 0) {
     db.connect('./db',['iplogs']);
 }
 
+app.get('/', function (req, res) {
+
+    var useripa = req.connection.remoteAddress;
+    var useripb = req.header('x-forwarded-for') || req.connection.remoteAddress;
+    console.log("get user IP form header : " + useripa + " " + useripb)
+
+    var servObj = db.iplogs.find({ip: useripa});
+
+    res.json({
+        "extip": servObj[0].extip,
+        "localip": servObj[0].ip
+    });
+});
+
 pi.on('connection', function (socket) {
 
     var ipNeedToSave = {};
